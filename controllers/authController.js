@@ -27,6 +27,7 @@ exports.registerUser = async (req, res) => {
             expiresIn: "1h",
         });
         await logToBlockchain("User registered", user._id);
+        console.log("User registered: ", user._id);
         res.status(201).json({ token });
     } catch (error) {
         res.status(500).json({
@@ -65,9 +66,11 @@ exports.loginUser = async (req, res) => {
 
         // Log the login action to the blockchain
         await logToBlockchain("User logged in", user._id);
+        console.log("User logged in: ", user._id);
 
         res.status(200).json({ token });
     } catch (error) {
         res.status(500).json({ error: "Error logging in user" });
+        console.log(error);
     }
 };
