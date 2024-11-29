@@ -165,7 +165,7 @@ exports.getDocuments = async (req, res) => {
                 title: doc.title,
                 magnet_link: purchasedDocumentIds.has(doc._id.toString())
                     ? doc.magnetLink
-                    : null,
+                    : "",
                 size: doc.size,
                 category: doc.category,
                 upload_date: doc.timestamp,
