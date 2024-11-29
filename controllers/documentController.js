@@ -163,7 +163,9 @@ exports.getDocuments = async (req, res) => {
             torrents: documents.map((doc) => ({
                 id: doc._id,
                 title: doc.title,
-                magnet_link: doc.magnetLink,
+                magnet_link: purchasedDocumentIds.has(doc._id.toString())
+                    ? doc.magnetLink
+                    : null,
                 size: doc.size,
                 category: doc.category,
                 upload_date: doc.timestamp,
