@@ -6,7 +6,10 @@ const documentSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    title: { type: String, required: true },
     magnetLink: { type: String, required: true },
+    size: { type: Number, required: true },
+    category: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
 });
 
@@ -21,4 +24,13 @@ const findDocumentsByUser = async (userId) => {
     return await Document.find({ userId }).sort({ timestamp: -1 });
 };
 
-module.exports = { Document, createDocument, findDocumentsByUser };
+const getAllDocuments = async () => {
+    return await Document.find().sort({ timestamp: -1 });
+};
+
+module.exports = {
+    Document,
+    createDocument,
+    findDocumentsByUser,
+    getAllDocuments,
+};

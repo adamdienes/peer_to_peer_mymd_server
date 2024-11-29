@@ -10,6 +10,7 @@ const { logOperation } = require("./blockchainController");
 const User = require("../models/userModel");
 const Document = require("../models/documentModel");
 const { findUserById } = require("../models/userModel");
+const { getAllDocuments } = require("../models/documentModel");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -116,15 +117,28 @@ exports.getDocuments = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
-        const documents = await findDocumentsByUser(decoded.id);
+        const documents = await getAllDocuments();
+
+        const user = await findUserById(decoded.id);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const purchasedDocumentIds = new Set(
+            user.purchasedDocuments.map((doc) => doc.documentId.toString())
+        );
+
         await logOperation(`Documents retrieved by user ${decoded.id}`);
+
         res.status(200).json({
             torrents: documents.map((doc) => ({
                 id: doc._id,
+                title: doc.title || "Lorem Ipsum",
                 magnet_link: doc.magnetLink,
+                size: doc.size || 0,
+                category: doc.category || "General",
                 upload_date: doc.timestamp,
-                category: doc.category || "Movie",
-                size: doc.size || "155",
+                is_purchased: purchasedDocumentIds.has(doc._id.toString()),
             })),
         });
     } catch (error) {
