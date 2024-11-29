@@ -28,9 +28,14 @@ const getAllDocuments = async () => {
     return await Document.find().sort({ timestamp: -1 });
 };
 
+const findDocumentById = async (documentId) => {
+    return await Document.findById(documentId);
+};
+
 module.exports = {
     Document,
     createDocument,
     findDocumentsByUser,
     getAllDocuments,
+    findDocumentById,
 };

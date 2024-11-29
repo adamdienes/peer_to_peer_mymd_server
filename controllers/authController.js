@@ -85,7 +85,6 @@ exports.loginUser = async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        // Log the login operation
         await logOperation("User Login", user._id, { username });
 
         res.status(200).json({ token, credits: user.credits });
