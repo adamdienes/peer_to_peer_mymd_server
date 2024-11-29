@@ -7,9 +7,9 @@ exports.connectToDatabase = async () => {
     try {
         mongoose.set("strictQuery", false);
         await mongoose.connect(uri);
-        console.log("Connected to MongoDB Atlas");
+        console.log("Connected to MongoDB");
     } catch (error) {
-        console.error("Failed to connect to MongoDB Atlas:", error.message);
+        console.error("Failed to connect to MongoDB:", error.message);
         process.exit(1);
     }
 };

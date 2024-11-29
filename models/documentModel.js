@@ -12,11 +12,13 @@ const documentSchema = new mongoose.Schema({
 
 const Document = mongoose.model("Document", documentSchema);
 
-exports.createDocument = async (documentData) => {
+const createDocument = async (documentData) => {
     const document = new Document(documentData);
     return await document.save();
 };
 
-exports.findDocumentsByUser = async (userId) => {
-    return await Document.find({ userId });
+const findDocumentsByUser = async (userId) => {
+    return await Document.find({ userId }).sort({ timestamp: -1 });
 };
+
+module.exports = { Document, createDocument, findDocumentsByUser };
