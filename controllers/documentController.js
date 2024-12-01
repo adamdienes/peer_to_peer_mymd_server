@@ -45,6 +45,9 @@ exports.uploadDocument = async (req, res) => {
             category,
         });
 
+        user.purchasedDocuments.push({ documentId: document._id });
+        user.save();
+
         await logOperation("Document Upload", decoded.id, {
             title,
             size,
@@ -89,6 +92,16 @@ exports.downloadDocument = async (req, res) => {
         const uploader = await User.findUserById(document.userId);
         if (!uploader)
             return res.status(404).json({ error: "Uploader not found" });
+
+        if (
+            user.purchasedDocuments.some(
+                (doc) => doc.documentId === document._id
+            )
+        ) {
+            return res
+                .status(403)
+                .json({ error: "Document already purchased" });
+        }
 
         if (!user._id.equals(uploader._id)) {
             user.credits -= 1;
